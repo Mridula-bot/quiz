@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attempt Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Attempt Quiz</h1>
+    <p>Test Your Knowledge</p>
+</header>
+
+<main class="container">
+    <section class="card">
+
+        {% if questions %}
+        <form action="/submit-quiz" method="POST">
+
+            {% for q in questions %}
+            <div class="question-card">
+                <h3>{{ loop.index }}. {{ q.question }}</h3>
+
+                <label class="quiz-option">
+                    <input type="radio" name="{{ q.id }}" value="A">
+                    A. {{ q.option_a }}
+                </label>
+
+                <label class="quiz-option">
+                    <input type="radio" name="{{ q.id }}" value="B">
+                    B. {{ q.option_b }}
+                </label>
+
+                <label class="quiz-option">
+                    <input type="radio" name="{{ q.id }}" value="C">
+                    C. {{ q.option_c }}
+                </label>
+
+                <label class="quiz-option">
+                    <input type="radio" name="{{ q.id }}" value="D">
+                    D. {{ q.option_d }}
+                </label>
+            </div>
+            {% endfor %}
+
+            <button type="submit">Submit Quiz</button>
+        </form>
+
+        {% else %}
+            <p>No questions available. Please add questions first.</p>
+        {% endif %}
+
+        <a href="/" class="back-link">Back to Dashboard</a>
+    </section>
+</main>
+
+</body>
+</html>

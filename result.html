@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Quiz Result</h1>
+    <p>Your Performance Summary</p>
+</header>
+
+<main class="container">
+    <section class="card result-card">
+
+        <h2>Your Score</h2>
+        <div class="score">{{ score }}</div>
+        <p>Marks earned from {{ total }} questions</p>
+
+        <h2>Answer Review</h2>
+
+        {% for item in results %}
+        <div class="question-card">
+            <h3>{{ loop.index }}. {{ item.question }}</h3>
+
+            <p>Your Answer: {{ item.selected }}</p>
+            <p>Correct Answer: {{ item.correct_answer }}</p>
+
+            {% if item.correct %}
+                <span class="correct">Correct Answer</span>
+            {% else %}
+                <span class="wrong">Incorrect Answer</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <a href="/" class="back-link">Back to Dashboard</a>
+    </section>
+</main>
+
+</body>
+</html>

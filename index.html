@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Question Sorting System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Quiz Question Sorting System</h1>
+    <p>Manage, Search and Sort Questions Using DAA Algorithms</p>
+</header>
+
+<main class="container">
+
+    <section class="card">
+        <h2>Add New Question</h2>
+
+        <form action="/add" method="POST" class="question-form">
+            <label>Question</label>
+            <input type="text" name="question" required>
+
+            <div class="form-grid">
+                <div>
+                    <label>Option A</label>
+                    <input type="text" name="option_a" required>
+                </div>
+                <div>
+                    <label>Option B</label>
+                    <input type="text" name="option_b" required>
+                </div>
+                <div>
+                    <label>Option C</label>
+                    <input type="text" name="option_c" required>
+                </div>
+                <div>
+                    <label>Option D</label>
+                    <input type="text" name="option_d" required>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div>
+                    <label>Correct Answer</label>
+                    <select name="answer" required>
+                        <option value="A">Option A</option>
+                        <option value="B">Option B</option>
+                        <option value="C">Option C</option>
+                        <option value="D">Option D</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Difficulty</label>
+                    <select name="difficulty">
+                        <option>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Marks</label>
+                    <input type="number" name="marks" min="1" value="1" required>
+                </div>
+            </div>
+
+            <button type="submit">Add Question</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Search and Sort Questions</h2>
+
+        <form action="/" method="GET" class="filter-form">
+            <div>
+                <label>Search Question</label>
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Enter exact question for Binary Search"
+                    value="{{ search_text }}"
+                >
+            </div>
+
+            <div>
+                <label>Search Algorithm</label>
+                <select name="search_method">
+                    <option value="linear" {% if search_method == "linear" %}selected{% endif %}>
+                        Linear Search
+                    </option>
+                    <option value="binary" {% if search_method == "binary" %}selected{% endif %}>
+                        Binary Search
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label>Sorting Algorithm</label>
+                <select name="sort_method">
+                    <option value="none">No Sorting</option>
+                    <option value="bubble" {% if sort_method == "bubble" %}selected{% endif %}>
+                        Bubble Sort
+                    </option>
+                    <option value="selection" {% if sort_method == "selection" %}selected{% endif %}>
+                        Selection Sort
+                    </option>
+                    <option value="merge" {% if sort_method == "merge" %}selected{% endif %}>
+                        Merge Sort
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label>Sort By</label>
+                <select name="sort_key">
+                    <option value="question" {% if sort_key == "question" %}selected{% endif %}>
+                        Question
+                    </option>
+                    <option value="difficulty" {% if sort_key == "difficulty" %}selected{% endif %}>
+                        Difficulty
+                    </option>
+                    <option value="marks" {% if sort_key == "marks" %}selected{% endif %}>
+                        Marks
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit">Apply</button>
+            <a href="/" class="reset-button">Reset</a>
+        </form>
+
+        {% if search_text and search_method == "binary" and not found_question %}
+            <p class="message">Exact question not found. Binary Search needs an exact match.</p>
+        {% endif %}
+    </section>
+
+    <section class="card">
+        <div class="section-heading">
+            <h2>Question Bank</h2>
+            <span>{{ questions|length }} Questions</span>
+        </div>
+
+        {% if questions %}
+            {% for q in questions %}
+            <div class="question-card">
+                <h3>{{ loop.index }}. {{ q.question }}</h3>
+
+                <p>A. {{ q.option_a }}</p>
+                <p>B. {{ q.option_b }}</p>
+                <p>C. {{ q.option_c }}</p>
+                <p>D. {{ q.option_d }}</p>
+
+                <div class="metadata">
+                    <span>Difficulty: {{ q.difficulty }}</span>
+                    <span>Marks: {{ q.marks }}</span>
+                </div>
+
+                <form action="/delete/{{ q.id }}" method="POST">
+                    <button type="submit" class="delete-button"
+                        onclick="return confirm('Delete this question?')">
+                        Delete
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No questions available.</p>
+        {% endif %}
+    </section>
+
+    <div class="quiz-link">
+        <a href="/quiz">Start Quiz</a>
+    </div>
+
+</main>
+
+<footer>
+    <p>DAA Mini Project | Quiz Question Sorting System</p>
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
